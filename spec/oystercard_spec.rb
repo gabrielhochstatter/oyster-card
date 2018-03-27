@@ -3,19 +3,23 @@ require "oystercard"
 describe Oystercard do
   subject(:oystercard) { described_class.new }
 
-    it "should know if it's on a journey" do
-      expect(oystercard.in_journey?).not_to be
-    end
+  it "should know if it's on a journey" do
+    expect(oystercard.in_journey?).not_to be
+  end
 
+  describe "#touch_in" do
     it "should change journey status to true when touching in" do
       oystercard.touch_in
       expect(oystercard.in_journey?).to be
     end
+  end
 
+  describe "#touch_out" do
     it "should change journey status to false when touching out" do
       oystercard.touch_out
       expect(oystercard.in_journey?).not_to be
     end
+  end
 
 
   describe '#top_up' do

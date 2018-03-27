@@ -22,6 +22,7 @@ class Oystercard
   end
 
   def touch_in
+
     @in_journey = true
   end
 
