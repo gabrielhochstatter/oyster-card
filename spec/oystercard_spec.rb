@@ -2,7 +2,6 @@ require "oystercard"
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }
-  #TEST
 
   it "should know if it's on a journey" do
     expect(oystercard.in_journey?).not_to be
@@ -10,9 +9,17 @@ describe Oystercard do
 
   describe "#touch_in" do
     it "should change journey status to true when touching in" do
+      oystercard.top_up(5)
       oystercard.touch_in
       expect(oystercard.in_journey?).to be
     end
+
+    it 'should let you touch in if you dont have £1 on your card' do
+      message = "You can not travel with less than £1"
+      empty_card = Oystercard.new(0)
+      expect { empty_card.touch_in }.to raise_error message
+    end
+
   end
 
   describe "#touch_out" do
