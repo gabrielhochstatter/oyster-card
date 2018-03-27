@@ -2,6 +2,7 @@ require "oystercard"
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }
+  #TEST
 
   it "should know if it's on a journey" do
     expect(oystercard.in_journey?).not_to be
