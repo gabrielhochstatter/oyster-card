@@ -27,6 +27,12 @@ describe Oystercard do
       oystercard.touch_out
       expect(oystercard.in_journey?).not_to be
     end
+
+    it 'should deduct £1 from the card when you touch out' do
+      oystercard.top_up(5)
+      oystercard.touch_in
+      expect {oystercard.touch_out}.to change{oystercard.balance}.by(-1)
+    end
   end
 
 
@@ -45,13 +51,6 @@ describe Oystercard do
   end
 
   describe '#deduct' do
-
-    it "deducts from the balance" do
-      oystercard.balance = 50
-      oystercard.deduct(10)
-      expect(oystercard.balance).to eq 40
-
-    end
 
   end
 
