@@ -12,6 +12,7 @@ class Oystercard
   def initialize(balance = 0)
     @balance = balance
     @previous_journeys = []
+    # @current_journey = nil
   end
 
   def top_up(amount)
@@ -54,25 +55,30 @@ class Oystercard
     @balance < MINIMUM_BALANCE
   end
 
-  def penalty_fare_touch_out?
-    @entry_station.nil?
+  def penalty_fare
+    deduct(PENALTY_FARE)
   end
 
   # HELPER METHODS
-  def touch_out_helper(exit_station)
-    @previous_journeys << Journey.new(@entry_station, exit_station)
-    fare(exit_station)
-  end
-
   def touch_in_helper(entry_station)
-    deduct(PENALTY_FARE) if in_journey?
+    penalty_fare if in_journey?
+    @current_journey = Journey.new(entry_station)
     @entry_station = entry_station
   end
 
+  def touch_out_helper(exit_station)
+    if @current_journey.nil?
+      penalty_fare
+    else
+      @current_journey.end_journey(exit_station)
+      @previous_journeys << @current_journey
+      fare(exit_station)
+    end
+    @current_journey = nil
+  end
+
   def fare(exit_station)
-    if penalty_fare_touch_out?
-      deduct(PENALTY_FARE)
-    elsif zone_comparison?(@entry_station, exit_station)
+    if zone_comparison?(@entry_station, exit_station)
       deduct(LOW_FARE)
     else
       deduct(HIGH_FARE)
@@ -82,7 +88,6 @@ class Oystercard
   def zone_comparison?(entry_station, exit_station)
     entry_station.zone == exit_station.zone
   end
-
 
   def deduct(amount)
     @balance -= amount
