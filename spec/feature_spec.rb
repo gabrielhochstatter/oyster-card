@@ -32,5 +32,12 @@ describe Oystercard do
     expect(oystercard.balance).to eq 44
   end
 
+  it "charges penalty fare if touching in without being touched out" do
+    oystercard.touch_in(bank)
+    oystercard.touch_in(waterloo)
+    expect(oystercard.balance).to eq 44
+  end
+
+
 
 end

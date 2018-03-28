@@ -25,7 +25,7 @@ class Oystercard
 
   def touch_in(station)
     too_low_balance_error if balance_too_low?
-    @entry_station = station
+    touch_in_helper(station)
     # @in_journey = true
   end
 
@@ -54,7 +54,7 @@ class Oystercard
     @balance < MINIMUM_BALANCE
   end
 
-  def penalty_fare?
+  def penalty_fare_touch_out?
     @entry_station.nil?
   end
 
@@ -64,8 +64,13 @@ class Oystercard
     fare(exit_station)
   end
 
+  def touch_in_helper(entry_station)
+    deduct(PENALTY_FARE) if in_journey?
+    @entry_station = entry_station
+  end
+
   def fare(exit_station)
-    if penalty_fare?
+    if penalty_fare_touch_out?
       deduct(PENALTY_FARE)
     elsif zone_comparison?(@entry_station, exit_station)
       deduct(LOW_FARE)
