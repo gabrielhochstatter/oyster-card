@@ -2,8 +2,8 @@ require "oystercard"
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }
-  let(:station) { double :station  }
-  let(:exit_station) { double :station }
+  let(:station) { double(:station, zone: 1) }
+  let(:exit_station) { double(:station, zone: 1) }
   let(:journey) { double :journey }
   before do
     oystercard.top_up(10)
@@ -55,7 +55,7 @@ describe Oystercard do
 
     it "saves the last journey to previous journeys" do
       oystercard.touch_out(exit_station)
-      expect(oystercard.previous_journeys.length).to eq 1
+      expect(oystercard.previous_journeys.empty?).not_to be
     end
   end
 

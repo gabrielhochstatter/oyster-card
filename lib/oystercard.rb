@@ -1,8 +1,13 @@
+require_relative 'journey'
+require_relative 'station'
+
 class Oystercard
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
-  MINIMUM_FARE = 1
+  LOW_FARE = 1
+  HIGH_FARE = 2
+  PENALTY_FARE = 6
   attr_accessor :balance, :entry_station, :previous_journeys
   def initialize(balance = 0)
     @balance = balance
@@ -21,7 +26,7 @@ class Oystercard
   def touch_in(station)
     too_low_balance_error if balance_too_low?
     @entry_station = station
-    @in_journey = true
+    # @in_journey = true
   end
 
   def touch_out(exit_station)
@@ -49,12 +54,30 @@ class Oystercard
     @balance < MINIMUM_BALANCE
   end
 
+  def penalty_fare?
+    @entry_station.nil?
+  end
+
   # HELPER METHODS
   def touch_out_helper(exit_station)
-    last_journey = Journey.new(@entry_station, exit_station)
-    @previous_journeys << last_journey
-    deduct(MINIMUM_FARE)
+    @previous_journeys << Journey.new(@entry_station, exit_station)
+    fare(exit_station)
   end
+
+  def fare(exit_station)
+    if penalty_fare?
+      deduct(PENALTY_FARE)
+    elsif zone_comparison?(@entry_station, exit_station)
+      deduct(LOW_FARE)
+    else
+      deduct(HIGH_FARE)
+    end
+  end
+
+  def zone_comparison?(entry_station, exit_station)
+    entry_station.zone == exit_station.zone
+  end
+
 
   def deduct(amount)
     @balance -= amount
