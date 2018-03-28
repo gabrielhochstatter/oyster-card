@@ -12,7 +12,6 @@ class Oystercard
   def initialize(balance = 0)
     @balance = balance
     @previous_journeys = []
-    # @current_journey = nil
   end
 
   def top_up(amount)
@@ -27,7 +26,6 @@ class Oystercard
   def touch_in(station)
     too_low_balance_error if balance_too_low?
     touch_in_helper(station)
-    # @in_journey = true
   end
 
   def touch_out(exit_station)
@@ -55,11 +53,11 @@ class Oystercard
     @balance < MINIMUM_BALANCE
   end
 
+  # HELPER METHODS
   def penalty_fare
     deduct(PENALTY_FARE)
   end
 
-  # HELPER METHODS
   def touch_in_helper(entry_station)
     penalty_fare if in_journey?
     @current_journey = Journey.new(entry_station)
@@ -67,7 +65,7 @@ class Oystercard
   end
 
   def touch_out_helper(exit_station)
-    if @current_journey.nil?
+    unless in_journey?
       penalty_fare
     else
       @current_journey.end_journey(exit_station)
