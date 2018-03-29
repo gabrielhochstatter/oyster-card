@@ -1,6 +1,6 @@
 class Journey
 
-  attr_accessor :trip, :entry_station, :exit_station
+  attr_reader :trip, :entry_station, :exit_station
 
   def initialize(entry_station, exit_station = nil)
     @entry_station = entry_station

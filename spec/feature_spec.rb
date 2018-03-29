@@ -38,5 +38,16 @@ describe Oystercard do
     expect(oystercard.balance).to eq 44
   end
 
+  it "saves incomplete journeys on double touch out" do
+    oystercard.touch_out(waterloo)
+    expect(oystercard.journeylog.journeys[0].trip).to eq(:no_station => waterloo)
+  end
+
+  it "save incomplete journeys on double touch in" do
+    oystercard.touch_in(bank)
+    oystercard.touch_in(waterloo)
+    expect(oystercard.journeylog.journeys[0].trip).to eq(bank => :no_station)
+  end
+
 
 end

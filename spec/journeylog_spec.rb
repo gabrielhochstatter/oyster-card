@@ -22,13 +22,16 @@ describe JourneyLog do
       journeylog.finish(other_station)
     end
 
-    it "saves thejourney to the previous journeys list and sets exit_station" do
-      # p journeylog
+    it "saves the journey to the previous journeys list and sets exit_station" do
       expect(journeylog.journeys[-1].trip[station]).to eq(other_station)
     end
 
     it "sets the current journey back to nil" do
       expect(journeylog.current_journey).to eq(nil)
+    end
+
+    it "saves incomplete journeys" do
+      
     end
 
   end

@@ -6,7 +6,6 @@ describe Journey do
   let(:exit_station) { double(:station) }
 
   it "stores two stations as a recorded journey" do
-    # journey = Journey.new
     expect(journey.trip).to include(entry_station => exit_station)
   end
 

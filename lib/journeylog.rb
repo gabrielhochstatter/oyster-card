@@ -1,5 +1,5 @@
 class JourneyLog
-  attr_accessor :current_journey
+  attr_reader :current_journey
 
   def initialize
 
