@@ -12,7 +12,7 @@ describe Oystercard do
     oystercard.touch_out(waterloo)
     oystercard.touch_in(waterloo)
     oystercard.touch_out(bank)
-    expect(oystercard.previous_journeys[1].trip).to eq({waterloo => bank})
+    expect(oystercard.journeylog.journeys[1].trip).to eq(waterloo => bank)
   end
 
   it "charges the correct amount for a Z1 to Z1 trip" do
@@ -37,7 +37,6 @@ describe Oystercard do
     oystercard.touch_in(waterloo)
     expect(oystercard.balance).to eq 44
   end
-
 
 
 end

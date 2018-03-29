@@ -53,10 +53,10 @@ describe Oystercard do
       expect(oystercard.entry_station).to eq nil
     end
 
-    it "saves the last journey to previous journeys" do
-      oystercard.touch_out(exit_station)
-      expect(oystercard.previous_journeys.empty?).not_to be
-    end
+    # it "saves the last journey to previous journeys" do
+    #   oystercard.touch_out(exit_station)
+    #   expect(oystercard.previous_journeys.empty?).not_to be
+    # end
   end
 
   describe '#top_up' do

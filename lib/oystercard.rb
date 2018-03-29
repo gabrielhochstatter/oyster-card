@@ -1,5 +1,6 @@
 require_relative 'journey'
 require_relative 'station'
+require_relative 'journeylog'
 
 class Oystercard
 
@@ -8,10 +9,12 @@ class Oystercard
   LOW_FARE = 1
   HIGH_FARE = 2
   PENALTY_FARE = 6
-  attr_accessor :balance, :entry_station, :previous_journeys
+  attr_accessor :balance, :entry_station, :previous_journeys, :journeylog
   def initialize(balance = 0)
     @balance = balance
     @previous_journeys = []
+    @journeylog = JourneyLog.new
+    @entry_station = nil
   end
 
   def top_up(amount)
@@ -60,7 +63,8 @@ class Oystercard
 
   def touch_in_helper(entry_station)
     penalty_fare if in_journey?
-    @current_journey = Journey.new(entry_station)
+    @journeylog.start(entry_station)
+    # @current_journey = Journey.new(entry_station)
     @entry_station = entry_station
   end
 
@@ -68,7 +72,7 @@ class Oystercard
     unless in_journey?
       penalty_fare
     else
-      @current_journey.end_journey(exit_station)
+      @journeylog.finish(exit_station)
       @previous_journeys << @current_journey
       fare(exit_station)
     end
